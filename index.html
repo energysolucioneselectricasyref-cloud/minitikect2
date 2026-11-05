@@ -247,7 +247,7 @@
             </tr>
         </thead>
         <tbody id="tabla-items">
-            <!-- Items dinámicos -->
+            <!-- Los items dinámicos se insertarán aquí mediante JavaScript -->
         </tbody>
     </table>
 
@@ -279,36 +279,36 @@
 </div>
 
 <script>
+    // Captura los parámetros de la URL
     const params = new URLSearchParams(window.location.search);
 
-    // Mapear campos de texto principales
+    // Formateador de moneda colombiana
+    const formatCurrency = (value) => {
+        const num = parseFloat(value) || 0;
+        return '$ ' + num.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+
+    // Mapear campos de texto principales y de cliente
     document.getElementById('txt-tipo-documento').innerText = params.get('tipo') || 'DOCUMENTO';
-    document.getElementById('txt-boleta').innerText = params.get('boleta') || '---';
-    document.getElementById('txt-mesa').innerText = params.get('mesa') || '---';
+    document.getElementById('txt-boleta').innerText = params.get('id') || '---';
+    document.getElementById('txt-fecha').innerText = params.get('fecha') || '---';
+    document.getElementById('txt-estado').innerText = params.get('estado') || '---';
+    document.getElementById('txt-metodo-pago').innerText = params.get('metodo_pago') || '---';
+    
+    document.getElementById('txt-mesa').innerText = params.get('cliente') || '---';
     document.getElementById('txt-identificacion').innerText = params.get('identificacion') || '---';
     document.getElementById('txt-telefono').innerText = params.get('telefono') || '---';
     document.getElementById('txt-direccion').innerText = params.get('direccion') || '---';
-    document.getElementById('txt-fecha').innerText = params.get('fecha') || '---';
-    document.getElementById('txt-estado').innerText = params.get('estado') || '---';
-    document.getElementById('txt-metodo-pago').innerText = params.get('metodo') || '---';
-    
-    // Mapear totales de dinero
-    document.getElementById('txt-total').innerText = params.get('total') ? '$ ' + params.get('total') : '$ 0.00';
-    document.getElementById('txt-descuento').innerText = params.get('descuento') ? '$ ' + params.get('descuento') : '$ 0.00';
-    document.getElementById('txt-iva').innerText = params.get('subtotal_desc') ? '$ ' + params.get('subtotal_desc') : '$ 0.00';
 
-    // Desglosar arreglos separados por comas
-    const serviciosRaw = params.get('servicios');
-    const cantidadesRaw = params.get('cantidades');
-    const preciosRaw = params.get('p_unit');
+    // Mapear bloques de totales con formato de moneda
+    document.getElementById('txt-subtotal').innerText = formatCurrency(params.get('subtotal'));
+    document.getElementById('txt-descuento').innerText = formatCurrency(params.get('descuento'));
+    document.getElementById('txt-iva').innerText = formatCurrency(params.get('iva'));
+    document.getElementById('txt-total').innerText = formatCurrency(params.get('total'));
 
-    if (serviciosRaw && cantidadesRaw && preciosRaw) {
-        const servicios = serviciosRaw.split(',');
-        const cantidades = cantidadesRaw.split(',');
-        const precios = preciosRaw.split(',');
+    // Renderizar imagen de Código de Barras si viene en la URL
+    const barcodeUrl = params.get('barcode');
+    if (barcodeUrl) {
+        document.getElementById('barcode-container').innerHTML = `<img src="${decodeURIComponent(barcodeUrl)}" alt="Código de barras">`;
+    }
 
-        const tbody = document.getElementById('tabla-items');
-        let calculadoSubtotalNeto = 0;
-
-        servicios.forEach((item, index) => {
-            const cant = parseFloat(cantidades[index]) || 0;
