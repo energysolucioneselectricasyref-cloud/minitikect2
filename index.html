@@ -216,24 +216,24 @@
             <p>Tierralta, Córdoba</p>
         </div>
         <div class="document-title">
-            <h2><<[Tipo_Documento]>></h2>
-            <p>N° <<[Número_Documento]>></p>
+            <h2>[Tipo_Documento]</h2>
+            <p>N° [ID_Documento]</p>
         </div>
     </div>
 
     <div class="info-grid">
         <div class="info-block">
             <h3>Datos del Comprobante</h3>
-            <p><strong>Fecha de Emisión:</strong> <<[Fecha]>></p>
-            <p><strong>Estado:</strong> <<[Estado]>></p>
-            <p><strong>Método de Pago:</strong> <<[Metodo_Pago]>></p>
+            <p><strong>Fecha de Emisión:</strong> [Fecha]</p>
+            <p><strong>Estado:</strong> [Estado]</p>
+            <p><strong>Método de Pago:</strong> [Metodo_Pago]</p>
         </div>
         <div class="info-block highlight">
             <h3>Información del Cliente</h3>
-            <p><strong>Cliente / Empresa:</strong> <<[ID_Cliente].[Nombre_Cliente]>></p>
-            <p><strong>Identificación:</strong> <<[ID_Cliente].[Identificación]>></p>
-            <p><strong>Teléfono:</strong> <<[ID_Cliente].[Teléfono]>></p>
-            <p><strong>Dirección:</strong> <<[ID_Cliente].[Dirección]>></p>
+            <p><strong>Cliente / Empresa:</strong> [ID_Cliente].[Nombre_Cliente]</p>
+            <p><strong>Identificación:</strong> [ID_Cliente].[Identificación]</p>
+            <p><strong>Teléfono:</strong> [ID_Cliente].[Teléfono]</p>
+            <p><strong>Dirección:</strong> [ID_Cliente].[Dirección]</p>
         </div>
     </div>
 
@@ -249,10 +249,10 @@
         <tbody>
             <<Start: [Related Detalle_Documentos]>>
             <tr>
-                <td><<[ID_Item].[Nombre_Item]>></td>
-                <td class="text-right"><<[Cantidad]>></td>
-                <td class="text-right">$ <<[Precio_Aplicado]>></td>
-                <td class="text-right">$ <<[Subtotal]>></td>
+                <td>[ID_Item].[Nombre_Item]</td>
+                <td class="text-right">[Cantidad]</td>
+                <td class="text-right">$ [Precio_Aplicado]</td>
+                <td class="text-right">$ [Subtotal]</td>
             </tr>
             <<End>>
         </tbody>
@@ -261,7 +261,7 @@
     <div class="footer-section">
         <div class="barcode-wrapper">
             <div class="barcode-container">
-                <<[Imagen_Codigo_Barra]>>
+                [Imagen_Codigo_Barra]
             </div>
             <p class="thanks-msg">Gracias por confiar en nuestros servicios profesionales de climatización y electricidad.</p>
         </div>
@@ -269,19 +269,19 @@
         <div class="totals-wrapper">
             <div class="total-row">
                 <span>Subtotal Neto:</span>
-                <strong>$ <<[Subtotal]>></strong>
+                <strong>$ [Subtotal]</strong>
             </div>
             <div class="total-row">
-                <span>Descuento (<<[Porcentaje_Descuento]*100>>%):</span>
-                <strong>$ <<[Monto_Descuento]>></strong>
+                <span>Descuento ([Porcentaje_Descuento]*100%):</span>
+                <strong>$ [Monto_Descuento]</strong>
             </div>
             <div class="total-row">
                 <span>IVA Aplicado (19%):</span>
-                <strong>$ <<[IVA_Total]>></strong>
+                <strong>$ [IVA_Total]</strong>
             </div>
             <div class="total-row final">
                 <span>TOTAL GENERAL:</span>
-                <strong>$ <<[Total_Documento]>></strong>
+                <strong>$ [Total_Documento]</strong>
             </div>
         </div>
     </div>
