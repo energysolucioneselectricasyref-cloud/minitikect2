@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura / Cotización - Energy Soluciones Eléctricas y Refrigeración</title>
+    <style>
+        :root {
+            --primary-color: #FF6B00; /* Naranja Corporativo */
+            --dark-color: #2D3748;
+            --light-bg: #F7FAFC;
+            --border-color: #E2E8F0;
+            --text-muted: #718096;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--dark-color);
+            background-color: #EAEDF1;
+            line-height: 1.5;
+            padding: 40px 15px;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-top: 8px solid var(--primary-color);
+        }
+
+        /* Encabezado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .company-info h1 {
+            font-size: 24px;
+            color: var(--dark-color);
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .document-title {
+            text-align: right;
+        }
+
+        .document-title h2 {
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .document-title p {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        /* Bloques de Información */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-block {
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid var(--border-color);
+        }
+
+        .info-block.highlight {
+            border-left-color: var(--primary-color);
+        }
+
+        .info-block h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .info-block p {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-block p strong {
+            color: #4A5568;
+        }
+
+        /* Tabla de Detalles */
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .details-table th {
+            background-color: var(--dark-color);
+            color: #FFFFFF;
+            text-align: left;
+            padding: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .details-table th.text-right, 
+        .details-table td.text-right {
+            text-align: right;
+        }
+
+        .details-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .details-table tr:last-child td {
+            border-bottom: 2px solid var(--dark-color);
+        }
+
+        /* Sección de Totales y Código de Barras */
+        .footer-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .barcode-wrapper {
+            text-align: center;
+            max-width: 250px;
+        }
+
+        .barcode-container {
+            margin-bottom: 10px;
+        }
+
+        .barcode-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .thanks-msg {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .totals-wrapper {
+            width: 320px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .total-row.final {
+            border-bottom: none;
+            padding-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Optimización para Impresión */
+        @media print {
+            body {
+                background-color: #FFFFFF;
+                padding: 0;
+            }
+            .invoice-container {
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+            }
+            .details-table th {
+                background-color: #E2E8F0 !important;
+                color: #000000 !important;
+                border-bottom: 2px solid #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-container">
+    <!-- Encabezado -->
+    <div class="header">
+        <div class="company-info">
+            <h1>⚡ ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN </h1>
+            <p><strong>NIT:</strong> 1073977725-0</p>
+            <p><strong>Dirección:</strong> Carrera 47 #13-48 E2, Barrio San José</p>
+            <p><strong>Teléfono:</strong> 3242432439</p>
+            <p>Tierralta, Córdoba</p>
+        </div>
+        <div class="document-title">
+            <h2><<[Tipo_Documento]>></h2>
+            <p>N° <<[Número_Documento]>></p>
+        </div>
+    </div>
+
+    <!-- Información de Comprobante y Cliente -->
+    <div class="info-grid">
+        <div class="info-block">
+            <h3>Datos del Comprobante</h3>
+            <p><strong>Fecha de Emisión:</strong> <<[Fecha]>></p>
+            <p><strong>Estado:</strong> <<[Estado]>></p>
+            <p><strong>Método de Pago:</strong> <<[Metodo_Pago]>></p>
+        </div>
+        <div class="info-block highlight">
+            <h3>Información del Cliente</h3>
+            <p><strong>Cliente / Empresa:</strong> <<[ID_Cliente].[Nombre_Cliente]>></p>
+            <p><strong>Identificación:</strong> <<[ID_Cliente].[Identificación]>></p>
+            <p><strong>Teléfono:</strong> <<[ID_Cliente].[Teléfono]>></p>
+            <p><strong>Dirección:</strong> <<[ID_Cliente].[Dirección]>></p>
+        </div>
+    </div>
+
+    <!-- Tabla de Trabajos / Materiales -->
+    <table class="details-table">
+        <thead>
+            <tr>
+                <th>Descripción del Ítem</th>
+                <th class="text-right" style="width: 100px;">Cantidad</th>
+                <th class="text-right" style="width: 150px;">Precio Unitario</th>
+                <th class="text-right" style="width: 150px;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <<Start: [Related Detalle_Documentos]>> -->
+            <tr>
+                <td><<[ID_Item].[Nombre_Item]>></td>
+                <td class="text-right"><<[Cantidad]>></td>
+                <td class="text-right">$<<[Precio_Aplicado]>></td>
+                <td class="text-right">$<<[Subtotal]>></td>
+            </tr>
+            <!-- <<End>> -->
+        </tbody>
+    </table>
+
+    <!-- Resumen y Footer -->
+    <div class="footer-section">
+        <!-- Código de Barras / Mensaje -->
+        <div class="barcode-wrapper">
+            <div class="barcode-container">
+                <!-- Aquí se renderiza la imagen del código de barras de AppSheet -->
+                <<[Imagen_Codigo_Barra]>>
+            </div>
+            <p class="thanks-msg">Gracias por confiar en nuestros servicios profesionales de climatización y electricidad.</p>
+        </div>
+
+        <!-- Totales -->
+        <div class="totals-wrapper">
+            <div class="total-row">
+                <span>Subtotal Neto:</span>
+                <strong>$<<[Subtotal]>></strong>
+            </div>
+            <div class="total-row">
+                <span>Descuento (<<[Porcentaje_Descuento]*100>>%):</span>
+                <strong>$<<[Monto_Descuento]>></strong>
+            </div>
+            <div class="total-row">
+                <span>IVA Aplicado (19%):</span>
+                <strong>$<<[IVA_Total]>></strong>
+            </div>
+            <div class="total-row final">
+                <span>TOTAL GENERAL:</span>
+                <span>$<<[Total_Documento]>></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
