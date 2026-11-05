@@ -6,7 +6,7 @@
     <title>Factura / Cotización - Energy Soluciones Eléctricas y Refrigeración</title>
     <style>
         :root {
-            --primary-color: #FF6B00; /* Naranja Corporativo */
+            --primary-color: #FF6B00;
             --dark-color: #2D3748;
             --light-bg: #F7FAFC;
             --border-color: #E2E8F0;
@@ -37,7 +37,6 @@
             border-top: 8px solid var(--primary-color);
         }
 
-        /* Encabezado */
         .header {
             display: flex;
             justify-content: space-between;
@@ -76,7 +75,6 @@
             color: var(--dark-color);
         }
 
-        /* Bloques de Información */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -112,7 +110,6 @@
             color: #4A5568;
         }
 
-        /* Tabla de Detalles */
         .details-table {
             width: 100%;
             border-collapse: collapse;
@@ -143,7 +140,6 @@
             border-bottom: 2px solid var(--dark-color);
         }
 
-        /* Sección de Totales y Código de Barras */
         .footer-section {
             display: flex;
             justify-content: space-between;
@@ -190,7 +186,6 @@
             color: var(--primary-color);
         }
 
-        /* Optimización para Impresión */
         @media print {
             body {
                 background-color: #FFFFFF;
@@ -212,10 +207,9 @@
 <body>
 
 <div class="invoice-container">
-    <!-- Encabezado -->
     <div class="header">
         <div class="company-info">
-            <h1>⚡ ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN </h1>
+            <h1>⚡ ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</h1>
             <p><strong>NIT:</strong> 1073977725-0</p>
             <p><strong>Dirección:</strong> Carrera 47 #13-48 E2, Barrio San José</p>
             <p><strong>Teléfono:</strong> 3242432439</p>
@@ -227,7 +221,6 @@
         </div>
     </div>
 
-    <!-- Información de Comprobante y Cliente -->
     <div class="info-grid">
         <div class="info-block">
             <h3>Datos del Comprobante</h3>
@@ -244,7 +237,6 @@
         </div>
     </div>
 
-    <!-- Tabla de Trabajos / Materiales -->
     <table class="details-table">
         <thead>
             <tr>
@@ -259,43 +251,44 @@
             <tr>
                 <td><<[ID_Item].[Nombre_Item]>></td>
                 <td class="text-right"><<[Cantidad]>></td>
-                <td class="text-right">$<<[Precio_Aplicado]>></td>
-                <td class="text-right">$<<[Subtotal]>></td>
+                <td class="text-right">$   <<[Precio_Aplicado]>></td>
+                <td class="text-right">$   <<[Subtotal]>></td>
             </tr>
             <!-- <<End>> -->
         </tbody>
     </table>
 
-    <!-- Resumen y Footer -->
     <div class="footer-section">
-        <!-- Código de Barras / Mensaje -->
         <div class="barcode-wrapper">
             <div class="barcode-container">
-                <!-- Aquí se renderiza la imagen del código de barras de AppSheet -->
                 <<[Imagen_Codigo_Barra]>>
             </div>
             <p class="thanks-msg">Gracias por confiar en nuestros servicios profesionales de climatización y electricidad.</p>
         </div>
 
-        <!-- Totales -->
         <div class="totals-wrapper">
             <div class="total-row">
                 <span>Subtotal Neto:</span>
-                <strong>$<<[Subtotal]>></strong>
+                <strong>$   <<[Subtotal]>></strong>
             </div>
             <div class="total-row">
                 <span>Descuento (<<[Porcentaje_Descuento]*100>>%):</span>
-                <strong>$<<[Monto_Descuento]>></strong>
+                <strong>$   <<[Monto_Descuento]>></strong>
             </div>
             <div class="total-row">
                 <span>IVA Aplicado (19%):</span>
-                <strong>$<<[IVA_Total]>></strong>
+                <strong>$   <<[IVA_Total]>></strong>
             </div>
             <div class="total-row final">
                 <span>TOTAL GENERAL:</span>
-                <span>$<<[Total_Documento]>></span>
+                <span>$   <<[Total_Documento]>></span>
             </div>
         </div>
+    </div>
+</div>
+
+</body>
+</html>
     </div>
 </div>
 
