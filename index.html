@@ -197,55 +197,14 @@
         }
 
         @media screen and (max-width: 600px) {
-            body {
-                padding: 10px 5px;
-            }
-
-            .invoice-container {
-                padding: 15px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .document-title {
-                text-align: left;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .footer-section {
-                flex-direction: column-reverse;
-                align-items: stretch;
-                gap: 25px;
-            }
-
-            .totals-wrapper {
-                width: 100%;
-            }
-
-            .barcode-wrapper {
-                max-width: 100%;
-                margin: 0 auto;
-            }
-        }
-
-        @media print {
-            body {
-                background-color: #FFFFFF;
-                padding: 0;
-            }
-            .invoice-container {
-                box-shadow: none;
-                padding: 0;
-                border-top: none;
-            }
+            body { padding: 10px 5px; }
+            .invoice-container { padding: 15px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .document-title { text-align: left; }
+            .info-grid { grid-template-columns: 1fr; gap: 15px; }
+            .footer-section { flex-direction: column-reverse; align-items: stretch; gap: 25px; }
+            .totals-wrapper { width: 100%; }
+            .barcode-wrapper { max-width: 100%; margin: 0 auto; }
         }
     </style>
 </head>
@@ -291,9 +250,7 @@
                     <th class="text-right" style="width: 150px;">Subtotal</th>
                 </tr>
             </thead>
-            <tbody id="tabla-items">
-                <!-- Se inserta de forma dinámica usando las listas de AppSheet -->
-            </tbody>
+            <tbody id="tabla-items"></tbody>
         </table>
     </div>
 
@@ -326,12 +283,7 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-
-    const formatter = new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 0
-    });
+    const formatter = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
     function limpiarNumero(val) {
         if (!val) return 0;
@@ -340,8 +292,20 @@
         return isNaN(numero) ? 0 : numero;
     }
 
-    // Mapeo directo de tus parámetros de AppSheet
+    // Carga de datos base
     document.getElementById('txt-tipo-documento').textContent = params.get('tipo_doc') || 'DOCUMENTO';
     document.getElementById('txt-boleta').textContent = params.get('boleta') || '---';
     document.getElementById('txt-fecha').textContent = params.get('fecha') || '---';
     document.getElementById('txt-estado').textContent = params.get('estado') || '---';
+    document.getElementById('txt-metodo-pago').textContent = params.get('metodo_pago') || '---';
+    document.getElementById('txt-mesa').textContent = params.get('mesa') || '---';
+    document.getElementById('txt-telefono').textContent = params.get('cli_tel') || '---';
+    document.getElementById('txt-direccion').textContent = params.get('direccion') || '---';
+
+    // División segura admitiendo comas limpias o espaciadas (" , ")
+    const txtCantidades = params.get('cantidades');
+    const txtServicios = params.get('servicios');
+    const txtPrecios = params.get('p_unit');
+
+    if (txtCantidades && txtServicios && txtPrecios) {
+        const arrCantidades = txtCantidades.includes(' , ') ? txtCantidades.split(' , ') : txtCantidades.split(',');
