@@ -106,7 +106,6 @@
             margin-bottom: 4px;
         }
 
-        /* Contenedor adaptativo para que la tabla no rompa el diseño en celulares */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -117,7 +116,7 @@
         .details-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 500px; /* Asegura una visualización correcta al deslizar en pantallas chicas */
+            min-width: 500px;
         }
 
         .details-table th {
@@ -197,7 +196,6 @@
             color: var(--primary-color);
         }
 
-        /* --- MEDIA QUERIES PARA DISEÑO RESPONSIVO (MÓVILES) --- */
         @media screen and (max-width: 600px) {
             body {
                 padding: 10px 5px;
@@ -294,7 +292,7 @@
                 </tr>
             </thead>
             <tbody id="tabla-items">
-                <!-- Los items dinámicos se insertarán aquí -->
+                <!-- Se inserta de forma dinámica usando las listas de AppSheet -->
             </tbody>
         </table>
     </div>
@@ -315,7 +313,7 @@
                 <strong id="txt-descuento">$ 0.00</strong>
             </div>
             <div class="total-row">
-                <span>IVA Aplicado (19%):</span>
+                <span>IVA Aplicado:</span>
                 <strong id="txt-iva">$ 0.00</strong>
             </div>
             <div class="total-row final">
@@ -327,20 +325,23 @@
 </div>
 
 <script>
-    // Captura los parámetros de la URL
     const params = new URLSearchParams(window.location.search);
 
-    // Formateador de moneda para Pesos Colombianos (COP)
     const formatter = new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0
     });
 
-    // Limpia y convierte textos numéricos a flotantes válidos
     function limpiarNumero(val) {
         if (!val) return 0;
-        // Elimina símbolos de dólar, puntos de miles y espacios, dejando solo números y decimales
         let limpio = val.replace(/[\$\s]/g, '').replace(/\./g, '').replace(',', '.');
         let numero = parseFloat(limpio);
         return isNaN(numero) ? 0 : numero;
+    }
+
+    // Mapeo directo de tus parámetros de AppSheet
+    document.getElementById('txt-tipo-documento').textContent = params.get('tipo_doc') || 'DOCUMENTO';
+    document.getElementById('txt-boleta').textContent = params.get('boleta') || '---';
+    document.getElementById('txt-fecha').textContent = params.get('fecha') || '---';
+    document.getElementById('txt-estado').textContent = params.get('estado') || '---';
