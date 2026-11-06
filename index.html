@@ -106,10 +106,18 @@
             margin-bottom: 4px;
         }
 
+        /* Contenedor adaptativo para que la tabla no rompa el diseño en celulares */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .details-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            min-width: 500px; /* Asegura una visualización correcta al deslizar en pantallas chicas */
         }
 
         .details-table th {
@@ -140,6 +148,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            gap: 20px;
         }
 
         .barcode-wrapper {
@@ -188,6 +197,47 @@
             color: var(--primary-color);
         }
 
+        /* --- MEDIA QUERIES PARA DISEÑO RESPONSIVO (MÓVILES) --- */
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 10px 5px;
+            }
+
+            .invoice-container {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .document-title {
+                text-align: left;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .footer-section {
+                flex-direction: column-reverse;
+                align-items: stretch;
+                gap: 25px;
+            }
+
+            .totals-wrapper {
+                width: 100%;
+            }
+
+            .barcode-wrapper {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+        }
+
         @media print {
             body {
                 background-color: #FFFFFF;
@@ -233,19 +283,21 @@
         </div>
     </div>
 
-    <table class="details-table">
-        <thead>
-            <tr>
-                <th>Descripción del Ítem</th>
-                <th class="text-right" style="width: 100px;">Cantidad</th>
-                <th class="text-right" style="width: 150px;">Precio Unitario</th>
-                <th class="text-right" style="width: 150px;">Subtotal</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-items">
-            <!-- Los items dinámicos se insertarán aquí -->
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="details-table">
+            <thead>
+                <tr>
+                    <th>Descripción del Ítem</th>
+                    <th class="text-right" style="width: 100px;">Cantidad</th>
+                    <th class="text-right" style="width: 150px;">Precio Unitario</th>
+                    <th class="text-right" style="width: 150px;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-items">
+                <!-- Los items dinámicos se insertarán aquí -->
+            </tbody>
+        </table>
+    </div>
 
     <div class="footer-section">
         <div class="barcode-wrapper">
@@ -275,48 +327,20 @@
 </div>
 
 <script>
+    // Captura los parámetros de la URL
     const params = new URLSearchParams(window.location.search);
 
+    // Formateador de moneda para Pesos Colombianos (COP)
     const formatter = new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0
     });
 
+    // Limpia y convierte textos numéricos a flotantes válidos
     function limpiarNumero(val) {
         if (!val) return 0;
-        let limpio = val.replace(/[^0-9.-]/g, '');
-        let num = parseFloat(limpio);
-        return isNaN(num) ? 0 : num;
-    }
-
-    document.getElementById('txt-tipo-documento').innerText = params.get('tipo_doc') || 'DOCUMENTO';
-    document.getElementById('txt-boleta').innerText = params.get('boleta') || '---';
-    document.getElementById('txt-fecha').innerText = params.get('fecha') || '---';
-    document.getElementById('txt-estado').innerText = params.get('estado') || '---';
-    document.getElementById('txt-metodo-pago').innerText = params.get('metodo_pago') || '---';
-
-    document.getElementById('txt-mesa').innerText = params.get('mesa') || '---';
-    document.getElementById('txt-telefono').innerText = params.get('cli_tel') || '---';
-    document.getElementById('txt-direccion').innerText = params.get('direccion') || '---';
-
-    document.getElementById('txt-subtotal').innerText = formatter.format(limpiarNumero(params.get('subtotal')));
-    document.getElementById('txt-descuento').innerText = formatter.format(limpiarNumero(params.get('descuento')));
-    document.getElementById('txt-iva').innerText = formatter.format(limpiarNumero(params.get('iva')));
-    document.getElementById('txt-total').innerText = formatter.format(limpiarNumero(params.get('total')));
-
-    const tbody = document.getElementById('tabla-items');
-    const txtCantidades = params.get('cantidades');
-    const txtServicios = params.get('servicios');
-    const txtPrecios = params.get('p_unit');
-
-    if (txtServicios && txtServicios.trim() !== "") {
-        const arrCantidades = txtCantidades.split(',');
-        const arrServicios = txtServicios.split(',');
-        const arrPrecios = txtPrecios.split(',');
-
-        tbody.innerHTML = '';
-
-        arrServicios.forEach((servicio, index) => {
-            if (servicio.trim() !== "") {
-
+        // Elimina símbolos de dólar, puntos de miles y espacios, dejando solo números y decimales
+        let limpio = val.replace(/[\$\s]/g, '').replace(/\./g, '').replace(',', '.');
+        let numero = parseFloat(limpio);
+        return isNaN(numero) ? 0 : numero;
