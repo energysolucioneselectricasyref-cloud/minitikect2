@@ -2,267 +2,126 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Documento - Energy Soluciones Eléctricas y Refrigeración</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENERGY - Visor de Ticket</title>
     <style>
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #333333;
-            margin: 0;
-            padding: 20px;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-        .invoice-box {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #eeeeee;
-            background-color: #ffffff;
-        }
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-        .company-logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FF6600; /* Naranja corporativo */
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-        .company-subtitle {
-            font-size: 11px;
-            color: #666666;
-            margin-top: 3px;
-        }
-        .document-title {
-            text-align: right;
-            font-size: 20px;
-            font-weight: bold;
-            color: #222222;
-        }
-        .document-number {
-            text-align: right;
-            font-size: 16px;
-            color: #FF6600;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-        .info-table td {
-            vertical-align: top;
-            width: 50%;
-        }
-        .section-heading {
-            font-size: 12px;
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #222222; /* Gris oscuro */
-            padding: 6px 10px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-        .info-box {
-            padding: 0 10px;
-            line-height: 1.6;
-        }
-        .details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-        .details-table th {
-            background-color: #FF6600;
-            color: #ffffff;
-            text-align: left;
-            padding: 8px 10px;
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .details-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eeeeee;
-        }
-        .details-table tr.item-row:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .totals-table {
-            width: 40%;
-            float: right;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        .totals-table td {
-            padding: 6px 10px;
-            border-bottom: 1px solid #eeeeee;
-        }
-        .totals-table tr.grand-total {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            font-size: 14px;
-            color: #FF6600;
-        }
-        .totals-table tr.grand-total td {
-            border-bottom: 2px solid #FF6600;
-        }
-        .footer-section {
-            clear: both;
-            margin-top: 40px;
-            border-top: 1px solid #dddddd;
-            padding-top: 15px;
-            color: #777777;
-            font-size: 11px;
-        }
-        .barcode-container {
-            margin-top: 15px;
-            text-align: right;
-        }
-        .barcode-image {
-            max-height: 50px;
-            width: auto;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .ticket { background: #fff; width: 80mm; padding: 5mm; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 2px; }
+        .brand { text-align: center; font-weight: bold; font-size: 16px; color: #FF6B00; margin-bottom: 5px; text-transform: uppercase; }
+        .subtitle { text-align: center; font-size: 11px; line-height: 14px; margin-bottom: 15px; border-bottom: 1px dashed #000; padding-bottom: 10px; }
+        .info-section { font-size: 12px; margin-bottom: 15px; line-height: 16px; }
+        .divider { border-top: 1px dashed #000; margin: 10px 0; }
+        .totals-table { width: 100%; font-size: 13px; margin-top: 10px; }
+        .totals-table td { padding: 3px 0; }
+        .text-right { text-align: right; }
+        .qr-container { text-align: center; margin-top: 20px; }
+        .qr-container img { width: 120px; height: 120px; }
+        .footer-text { text-align: center; font-size: 11px; margin-top: 15px; font-style: italic; }
+        
+        /* Botón flotante para impresión manual si se requiere */
+        .btn-print { background: #FF6B00; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        @media print {
+            body { background: none; padding: 0; display: block; }
+            .ticket { width: 100%; box-shadow: none; padding: 0; }
+            .btn-print { display: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="invoice-box">
-    <!-- Encabezado Principal de la Empresa -->
-    <table class="header-table">
-        <tr>
-            <td>
-                <div class="company-logo">Energy</div>
-                <div class="company-subtitle" style="font-weight: bold; color: #222222; font-size: 12px; letter-spacing: 0.5px;">SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</div>
-                <div class="company-subtitle">
-                    Nit / CC: [NIT Omitido]<br>
-                    Carrera 47 #13-48 E2, Barrio San José<br>
-                    Tierralta, Córdoba<br>
-                    Teléfono: 3242432439
-                </div>
-            </td>
-            <td style="vertical-align: top;">
-                <div class="document-title"><<_UPPERCASE([Tipo])>></div>
-                <div class="document-number">N° <<[Consecutivo]>></div>
-                <div class="company-subtitle" style="text-align: right; margin-top: 10px;">
-                    <strong>Fecha Emisión:</strong> <<TEXT([Fecha], "DD/MM/YYYY")>>
-                </div>
-            </td>
-        </tr>
-    </table>
+    <div class="ticket">
+        <div class="brand">ENERGY</div>
+        <div class="brand" style="font-size: 12px; color: #333; margin-top: -4px;">Soluciones Eléctricas y Refrigeración</div>
+        <div class="subtitle">
+            Carrera 47 #13-48 E2, Barrio San José<br>
+            Tierralta, Córdoba<br>
+            Cel: 3242432439
+        </div>
 
-    <!-- Información de Datos del Cliente -->
-    <table class="info-table">
-        <tr>
-            <td style="padding-right: 10px;">
-                <div class="section-heading">Datos del Cliente</div>
-                <div class="info-box">
-                    <strong>Nombre / Razón Social:</strong> <<[Cliente].[Nombre_Cliente]>> <br>
-                    <strong>Teléfono:</strong> <<[Cliente].[Telefono]>> <br>
-                    <strong>Dirección:</strong> <<[Cliente].[Direccion]>> <br>
-                    <strong>Email:</strong> <<[Cliente].[Email]>>
-                </div>
-            </td>
-            <td style="padding-left: 10px;">
-                <div class="section-heading">Detalles del Documento</div>
-                <div class="info-box">
-                    <strong>ID Documento:</strong> <<[ID_Documento]>> <br>
-                    <strong>Tipo de Operación:</strong> Solución Técnica Integrada <br>
-                    <strong>Moneda:</strong> Pesos Colombianos (COP)
-                </div>
-            </td>
-        </tr>
-    </table>
+        <div class="info-section">
+            <b id="lbl-tipo-doc">DOCUMENTO</b> N°: <span id="val-boleta"></span><br>
+            Fecha: <span id="val-fecha"></span><br>
+            Estado: <span id="val-estado"></span><br>
+            Método de Pago: <span id="val-metodo"></span>
+        </div>
 
-    <!-- Tabla Dinámica de Productos y Servicios (Mano de Obra) -->
-    <table class="details-table">
-        <thead>
+        <div class="divider"></div>
+
+        <div class="info-section">
+            <b>CLIENTE:</b> <span id="val-cliente"></span><br>
+            ID/CC: <span id="val-cli-id"></span><br>
+            Teléfono: <span id="val-cli-tel"></span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Tabla de totales directos enviados por la URL -->
+        <table class="totals-table">
             <tr>
-                <th>Descripción del Ítem / Servicio (Mano de Obra)</th>
-                <th class="text-center" style="width: 10%;">Cant.</th>
-                <th class="text-right" style="width: 15%;">Precio Unit.</th>
-                <th class="text-right" style="width: 15%;">Total</th>
+                <td>Subtotal Bruto:</td>
+                <td class="text-right">$<span id="val-bruto">0.00</span></td>
             </tr>
-        </thead>
-        <tbody>
-            <!-- Inicio del bucle relacional nativo de AppSheet -->
-            <<Start: [Related Detalles_Documentos]>>
-            <tr class="item-row">
-                <td>
-                    <strong>
-                    <<IFS(
-                        [Tipo_Item] = "Producto", [Productos_Inventario].[Nombre_Producto],
-                        [Tipo_Item] = "Servicio", [Servicios_Mano_Obra].[Descripcion_Servicio]
-                    )>>
-                    </strong>
-                    <br>
-                    <small style="color: #666666; font-size: 10px;">Tipo: <<[Tipo_Item]>></small>
-                </td>
-                <td class="text-center">
-                    <<[Cantidad]>>
-                </td>
-                <td class="text-right">
-                    $<<[Precio_Unitario]>>
-                </td>
-                <td class="text-right">
-                    $<<[Total_Linea]>>
-                </td>
-            </tr>
-            <<End>>
-            <!-- Fin del bucle relacional -->
-        </tbody>
-    </table>
-
-    <!-- Bloque de Liquidación de Totales -->
-    <table class="totals-table">
-        <tr>
-            <td>Subtotal:</td>
-            <td class="text-right">$<<[Subtotal]>></td>
-        </tr>
-        <tr>
-            <td>IVA Acumulado:</td>
-            <td class="text-right">$<<[IVA_Total]>></td>
-        </tr>
-        <tr class="grand-total">
-            <td>Total Neto:</td>
-            <td class="text-right">$<<[Total_Neto]>></td>
-        </tr>
-    </table>
-
-    <!-- Pie de Página, Términos y Código de Barras Automático -->
-    <div class="footer-section">
-        <table style="width: 100%; border-collapse: collapse;">
             <tr>
-                <td style="width: 65%; vertical-align: top;">
-                    <strong>Términos y Condiciones Generales:</strong><br>
-                    - Si este documento es una Cotización, tiene validez por 15 días hábiles.<br>
-                    - Todo servicio de mano de obra y mantenimiento técnico cuenta con garantía directa.<br>
-                    - Los materiales e insumos están sujetos a disponibilidad de inventario.
-                </td>
-                <td style="width: 35%; text-align: right; vertical-align: top;">
-                    <!-- Renderizado dinámico del código de barras usando el ID_Documento -->
-                    <div class="barcode-container">
-                        <img class="barcode-image" src="https://barcodesinc.com<<[ID_Documento]>>&style=197&type=C128B&width=200&height=50&xres=1&font=3" alt="Código de Barras"><br>
-                        <small style="font-size: 9px; color: #666666; margin-top: 2px; display: block;">ID: <<[ID_Documento]>></small>
-                    </div>
-                </td>
+                <td>IVA:</td>
+                <td class="text-right">$<span id="val-iva">0.00</span></td>
+            </tr>
+            <tr style="font-weight: bold; font-size: 15px;">
+                <td>TOTAL NETO:</td>
+                <td class="text-right">$<span id="val-neto">0.00</span></td>
             </tr>
         </table>
-        <div style="text-align: center; margin-top: 30px; color: #999999; font-size: 10px;">
-            Gracias por elegir a Energy Soluciones Eléctricas y Refrigeración. ¡Su energía en manos expertas!
+
+        <div class="qr-container">
+            <img id="img-qr" src="" alt="Código QR">
+            <p style="font-size: 10px; margin-top: 5px;">Validación del Servicio</p>
+        </div>
+
+        <div class="footer-text">
+            ¡Gracias por su confianza!<br>
+            Servicio Técnico Garantizado
         </div>
     </div>
-</div>
 
+    <button class="btn-print" onclick="window.print()">Imprimir Ticket</button>
+
+    <script>
+        // Función para leer los parámetros GET de la URL
+        function obtenerParametro(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name) || '';
+        }
+
+        // Asignación de datos a los elementos HTML al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            const tipoDoc = obtenerParametro('tipo_doc');
+            
+            document.getElementById('lbl-tipo-doc').innerText = tipoDoc.toUpperCase();
+            document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
+            document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
+            document.getElementById('val-estado').innerText = obtenerParametro('estado');
+            document.getElementById('val-metodo').innerText = obtenerParametro('metodo_pago');
+            document.getElementById('val-cliente').innerText = obtenerParametro('mesa');
+            document.getElementById('val-cli-id').innerText = obtenerParametro('cli_id');
+            document.getElementById('val-cli-tel').innerText = obtenerParametro('cli_tel');
+            
+            // Parámetros numéricos económicos agregados
+            document.getElementById('val-bruto').innerText = obtenerParametro('bruto');
+            document.getElementById('val-iva').innerText = obtenerParametro('iva');
+            document.getElementById('val-neto').innerText = obtenerParametro('neto');
+
+            // Generación dinámica del código QR usando el ID de la boleta
+            const boletaId = obtenerParametro('boleta');
+            if(boletaId) {
+                document.getElementById('img-qr').src = `https://qrserver.com{encodeURIComponent(boletaId)}`;
+            }
+
+            // Ejecuta el cuadro de impresión automáticamente tras cargar los datos
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        });
+    </script>
 </body>
 </html>
