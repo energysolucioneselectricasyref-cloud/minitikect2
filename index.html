@@ -10,23 +10,22 @@
         .ticket { background: #fff; width: 80mm; padding: 5mm; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 2px; }
         .brand { text-align: center; font-weight: bold; font-size: 16px; color: #FF6B00; margin-bottom: 5px; text-transform: uppercase; }
         .subtitle { text-align: center; font-size: 11px; line-height: 14px; margin-bottom: 15px; border-bottom: 1px dashed #000; padding-bottom: 10px; }
-        .info-section { font-size: 12px; margin-bottom: 15px; line-height: 16px; }
+        .info-section { font-size: 12px; margin-bottom: 10px; line-height: 16px; }
         .divider { border-top: 1px dashed #000; margin: 10px 0; }
-        .totals-table { width: 100%; font-size: 13px; margin-top: 10px; }
+        
+        /* Nueva Tabla de Productos/Servicios */
+        .items-table { width: 100%; font-size: 11px; border-collapse: collapse; margin: 10px 0; }
+        .items-table th { border-bottom: 1px solid #000; text-align: left; padding-bottom: 4px; }
+        .items-table td { padding: 4px 0; vertical-align: top; }
+        
+        .totals-table { width: 100%; font-size: 13px; margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
         .totals-table td { padding: 3px 0; }
         .text-right { text-align: right; }
         .qr-container { text-align: center; margin-top: 20px; }
-        .qr-container img { width: 120px; height: 120px; }
+        .qr-container img { width: 130px; height: 130px; display: inline-block; background: #eee; }
         .footer-text { text-align: center; font-size: 11px; margin-top: 15px; font-style: italic; }
-        
-        /* Botón flotante para impresión manual si se requiere */
         .btn-print { background: #FF6B00; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
-        @media print {
-            body { background: none; padding: 0; display: block; }
-            .ticket { width: 100%; box-shadow: none; padding: 0; }
-            .btn-print { display: none; }
-        }
+        @media print { body { background: none; padding: 0; display: block; } .ticket { width: 100%; box-shadow: none; padding: 0; } .btn-print { display: none; } }
     </style>
 </head>
 <body>
@@ -57,7 +56,20 @@
 
         <div class="divider"></div>
 
-        <!-- Tabla de totales directos enviados por la URL -->
+        <!-- SECCIÓN DE ÍTEMS CORREGIDA -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th class="text-right">Cant x Precio</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody id="lista-items">
+                <!-- Las filas de materiales se inyectan aquí dinámicamente -->
+            </tbody>
+        </table>
+
         <table class="totals-table">
             <tr>
                 <td>Subtotal Bruto:</td>
@@ -74,7 +86,8 @@
         </table>
 
         <div class="qr-container">
-            <img id="img-qr" src="" alt="Código QR">
+            <!-- Proveedor alternativo de QR con protocolo HTTPS seguro -->
+            <img id="img-qr" src="" alt="Cargando QR...">
             <p style="font-size: 10px; margin-top: 5px;">Validación del Servicio</p>
         </div>
 
@@ -87,16 +100,13 @@
     <button class="btn-print" onclick="window.print()">Imprimir Ticket</button>
 
     <script>
-        // Función para leer los parámetros GET de la URL
         function obtenerParametro(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name) || '';
         }
 
-        // Asignación de datos a los elementos HTML al cargar la página
         window.addEventListener('DOMContentLoaded', () => {
-            const tipoDoc = obtenerParametro('tipo_doc');
-            
+            const tipoDoc = obtenerParametro('tipo_doc') || 'DOCUMENTO';
             document.getElementById('lbl-tipo-doc').innerText = tipoDoc.toUpperCase();
             document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
             document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
@@ -105,22 +115,40 @@
             document.getElementById('val-cliente').innerText = obtenerParametro('mesa');
             document.getElementById('val-cli-id').innerText = obtenerParametro('cli_id');
             document.getElementById('val-cli-tel').innerText = obtenerParametro('cli_tel');
-            
-            // Parámetros numéricos económicos agregados
             document.getElementById('val-bruto').innerText = obtenerParametro('bruto');
             document.getElementById('val-iva').innerText = obtenerParametro('iva');
             document.getElementById('val-neto').innerText = obtenerParametro('neto');
 
-            // Generación dinámica del código QR usando el ID de la boleta
-            const boletaId = obtenerParametro('boleta');
-            if(boletaId) {
-                document.getElementById('img-qr').src = `https://qrserver.com{encodeURIComponent(boletaId)}`;
+            // 1. PROCESAR PRODUCTOS Y SERVICIOS DESDE LA URL
+            const datosProductos = obtenerParametro('items');
+            const tablaBody = document.getElementById('lista-items');
+            
+            if (datosProductos) {
+                // Separa los productos que vienen divididos por el caracter "|"
+                const filas = datosProductos.split('|');
+                filas.forEach(fila => {
+                    if(fila.trim() !== "") {
+                        const columnas = fila.split(',');
+                        if(columnas.length >= 3) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${columnas[0]}</td>
+                                <td class="text-right">${columnas[1]} x $${columnas[2]}</td>
+                                <td class="text-right">$${(parseFloat(columnas[1]) * parseFloat(columnas[2])).toFixed(2)}</td>
+                            `;
+                            tablaBody.appendChild(tr);
+                        }
+                    }
+                });
+            } else {
+                tablaBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#777;">No hay ítems registrados</td></tr>';
             }
 
-            // Ejecuta el cuadro de impresión automáticamente tras cargar los datos
-            setTimeout(() => {
-                window.print();
-            }, 500);
+            // 2. CORRECCIÓN CARGA DE CÓDIGO QR
+            const boletaId = obtenerParametro('boleta');
+            if(boletaId) {
+                document.getElementById('img-qr').src = `https://select-qr.com{encodeURIComponent(boletaId)}`;
+            }
         });
     </script>
 </body>
