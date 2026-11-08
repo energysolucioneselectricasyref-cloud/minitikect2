@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENERGY - Visor de Ticket</title>
+    <title>ENERGY - Visor de Ticket Oficial</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
         body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
@@ -13,7 +13,6 @@
         .info-section { font-size: 12px; margin-bottom: 10px; line-height: 16px; }
         .divider { border-top: 1px dashed #000; margin: 10px 0; }
         
-        /* Nueva Tabla de Productos/Servicios */
         .items-table { width: 100%; font-size: 11px; border-collapse: collapse; margin: 10px 0; }
         .items-table th { border-bottom: 1px solid #000; text-align: left; padding-bottom: 4px; }
         .items-table td { padding: 4px 0; vertical-align: top; }
@@ -22,7 +21,7 @@
         .totals-table td { padding: 3px 0; }
         .text-right { text-align: right; }
         .qr-container { text-align: center; margin-top: 20px; }
-        .qr-container img { width: 130px; height: 130px; display: inline-block; background: #eee; }
+        .qr-container img { width: 130px; height: 130px; display: inline-block; }
         .footer-text { text-align: center; font-size: 11px; margin-top: 15px; font-style: italic; }
         .btn-print { background: #FF6B00; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         @media print { body { background: none; padding: 0; display: block; } .ticket { width: 100%; box-shadow: none; padding: 0; } .btn-print { display: none; } }
@@ -56,7 +55,6 @@
 
         <div class="divider"></div>
 
-        <!-- SECCIÓN DE ÍTEMS CORREGIDA -->
         <table class="items-table">
             <thead>
                 <tr>
@@ -66,7 +64,7 @@
                 </tr>
             </thead>
             <tbody id="lista-items">
-                <!-- Las filas de materiales se inyectan aquí dinámicamente -->
+                <!-- Inyección automática -->
             </tbody>
         </table>
 
@@ -76,7 +74,7 @@
                 <td class="text-right">$<span id="val-bruto">0.00</span></td>
             </tr>
             <tr>
-                <td>IVA:</td>
+                <td>IVA (19%):</td>
                 <td class="text-right">$<span id="val-iva">0.00</span></td>
             </tr>
             <tr style="font-weight: bold; font-size: 15px;">
@@ -86,9 +84,8 @@
         </table>
 
         <div class="qr-container">
-            <!-- Proveedor alternativo de QR con protocolo HTTPS seguro -->
-            <img id="img-qr" src="" alt="Cargando QR...">
-            <p style="font-size: 10px; margin-top: 5px;">Validación del Servicio</p>
+            <img id="img-qr" src="" alt="Generando QR...">
+            <p style="font-size: 10px; margin-top: 5px;">Validación de Servicio Técnico</p>
         </div>
 
         <div class="footer-text">
@@ -106,8 +103,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const tipoDoc = obtenerParametro('tipo_doc') || 'DOCUMENTO';
-            document.getElementById('lbl-tipo-doc').innerText = tipoDoc.toUpperCase();
+            document.getElementById('lbl-tipo-doc').innerText = (obtenerParametro('tipo_doc') || 'DOCUMENTO').toUpperCase();
             document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
             document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
             document.getElementById('val-estado').innerText = obtenerParametro('estado');
@@ -119,36 +115,41 @@
             document.getElementById('val-iva').innerText = obtenerParametro('iva');
             document.getElementById('val-neto').innerText = obtenerParametro('neto');
 
-            // 1. PROCESAR PRODUCTOS Y SERVICIOS DESDE LA URL
             const datosProductos = obtenerParametro('items');
             const tablaBody = document.getElementById('lista-items');
             
-            if (datosProductos) {
-                // Separa los productos que vienen divididos por el caracter "|"
-                const filas = datosProductos.split('|');
-                filas.forEach(fila => {
-                    if(fila.trim() !== "") {
-                        const columnas = fila.split(',');
-                        if(columnas.length >= 3) {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${columnas[0]}</td>
-                                <td class="text-right">${columnas[1]} x $${columnas[2]}</td>
-                                <td class="text-right">$${(parseFloat(columnas[1]) * parseFloat(columnas[2])).toFixed(2)}</td>
-                            `;
-                            tablaBody.appendChild(tr);
-                        }
-                    }
-                });
+            if (datosProductos && datosProductos.trim() !== "") {
+                tablaBody.innerHTML = ""; 
+                const partes = datosProductos.split(',');
+                const unTercio = Math.floor(partes.length / 3);
+                
+                for (let i = 0; i < unTercio; i++) {
+                    const desc = partes[i] ? partes[i].trim() : 'Servicio';
+                    const cant = partes[i + unTercio] ? partes[i + unTercio].trim() : '1';
+                    const precio = partes[i + (unTercio * 2)] ? partes[i + (unTercio * 2)].trim() : '0';
+                    
+                    const numPrecio = parseFloat(precio.replace(/[^0-9.-]+/g,""));
+                    const numCant = parseFloat(cant);
+                    const totalLinea = numCant * numPrecio;
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${desc}</td>
+                        <td class="text-right">${cant} x $${numPrecio.toLocaleString('es-CO')}</td>
+                        <td class="text-right">$${isNaN(totalLinea) ? '0' : totalLinea.toLocaleString('es-CO')}</td>
+                    `;
+                    tablaBody.appendChild(tr);
+                }
             } else {
                 tablaBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#777;">No hay ítems registrados</td></tr>';
             }
 
-            // 2. CORRECCIÓN CARGA DE CÓDIGO QR
             const boletaId = obtenerParametro('boleta');
-            if(boletaId) {
-                document.getElementById('img-qr').src = `https://select-qr.com{encodeURIComponent(boletaId)}`;
+            if (boletaId) {
+                document.getElementById('img-qr').src = `https://qrserver.com{encodeURIComponent(boletaId)}`;
             }
+            
+            setTimeout(() => { window.print(); }, 800);
         });
     </script>
 </body>
