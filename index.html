@@ -21,7 +21,7 @@
         .totals-table td { padding: 3px 0; }
         .text-right { text-align: right; }
         .qr-container { text-align: center; margin-top: 20px; }
-        .qr-container img { width: 130px; height: 130px; display: inline-block; }
+        .qr-container img { width: 130px; height: 130px; display: inline-block; background: #f9f9f9; }
         .footer-text { text-align: center; font-size: 11px; margin-top: 15px; font-style: italic; }
         .btn-print { background: #FF6B00; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         @media print { body { background: none; padding: 0; display: block; } .ticket { width: 100%; box-shadow: none; padding: 0; } .btn-print { display: none; } }
@@ -64,7 +64,7 @@
                 </tr>
             </thead>
             <tbody id="lista-items">
-                <!-- Inyección automática -->
+                <!-- Inyección automática por JavaScript -->
             </tbody>
         </table>
 
@@ -84,7 +84,7 @@
         </table>
 
         <div class="qr-container">
-            <img id="img-qr" src="" alt="Generando QR...">
+            <img id="img-qr" src="" alt="Cargando código QR...">
             <p style="font-size: 10px; margin-top: 5px;">Validación de Servicio Técnico</p>
         </div>
 
@@ -96,14 +96,14 @@
 
     <button class="btn-print" onclick="window.print()">Imprimir Ticket</button>
 
-        <script>
+    <script>
         function obtenerParametro(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name) || '';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Cargar datos principales sin duplicar el signo de pesos
+            // 1. CARGA DE VALORES PRINCIPALES DE MANERA LIMPIA
             document.getElementById('lbl-tipo-doc').innerText = (obtenerParametro('tipo_doc') || 'DOCUMENTO').toUpperCase();
             document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
             document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
@@ -113,7 +113,6 @@
             document.getElementById('val-cli-id').innerText = obtenerParametro('cli_id');
             document.getElementById('val-cli-tel').innerText = obtenerParametro('cli_tel');
             
-            // Limpiar los valores monetarios eliminando signos extras que envíe AppSheet
             const bruto = obtenerParametro('bruto').replace('$', '').trim();
             const iva = obtenerParametro('iva').replace('$', '').trim();
             const neto = obtenerParametro('neto').replace('$', '').trim();
@@ -122,12 +121,15 @@
             document.getElementById('val-iva').innerText = iva;
             document.getElementById('val-neto').innerText = neto;
 
+            // 2. DETECTAR Y RECONSTRUIR PRODUCTOS SEPARADOS POR BARRAS '|'
             const datosProductos = obtenerParametro('items');
             const tablaBody = document.getElementById('lista-items');
             
             if (datosProductos && datosProductos.trim() !== "") {
                 tablaBody.innerHTML = ""; 
-                const partes = datosProductos.split(',');
+                
+                // Dividimos la información general por los bloques principales de AppSheet
+                const partes = datosProductos.split('|');
                 const unTercio = Math.floor(partes.length / 3);
                 
                 for (let i = 0; i < unTercio; i++) {
@@ -135,15 +137,15 @@
                     const cant = partes[i + unTercio] ? partes[i + unTercio].trim() : '1';
                     const precio = partes[i + (unTercio * 2)] ? partes[i + (unTercio * 2)].trim().replace('$', '') : '0';
                     
-                    const numPrecio = parseFloat(precio.replace(/[^0-9.-]+/g,""));
-                    const numCant = parseFloat(cant);
+                    const numPrecio = parseFloat(precio.replace(/[^0-9.-]+/g,"")) || 0;
+                    const numCant = parseFloat(cant) || 0;
                     const totalLinea = numCant * numPrecio;
                     
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${desc}</td>
                         <td class="text-right">${cant} x $${numPrecio.toLocaleString('es-CO')}</td>
-                        <td class="text-right">$${isNaN(totalLinea) ? '0' : totalLinea.toLocaleString('es-CO')}</td>
+                        <td class="text-right">$${totalLinea.toLocaleString('es-CO')}</td>
                     `;
                     tablaBody.appendChild(tr);
                 }
@@ -151,11 +153,14 @@
                 tablaBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#777;">No hay ítems registrados</td></tr>';
             }
 
-            // CORRECCIÓN CÓDIGO QR AUTOMÁTICO (Utilizando una API SSL alternativa rápida)
+            // 3. ESTRUCTURA CORRECTA DEL CÓDIGO QR AUTOMÁTICO (QuickChart API)
             const boletaId = obtenerParametro('boleta');
             if (boletaId) {
                 document.getElementById('img-qr').src = `https://quickchart.io{encodeURIComponent(boletaId)}&size=150`;
             }
+            
+            // Disparador de impresión automática con retardo seguro
+            setTimeout(() => { window.print(); }, 1000);
         });
     </script>
 </body>
