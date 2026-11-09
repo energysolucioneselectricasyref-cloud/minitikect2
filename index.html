@@ -96,13 +96,14 @@
 
     <button class="btn-print" onclick="window.print()">Imprimir Ticket</button>
 
-    <script>
+        <script>
         function obtenerParametro(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name) || '';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Cargar datos principales sin duplicar el signo de pesos
             document.getElementById('lbl-tipo-doc').innerText = (obtenerParametro('tipo_doc') || 'DOCUMENTO').toUpperCase();
             document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
             document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
@@ -111,9 +112,15 @@
             document.getElementById('val-cliente').innerText = obtenerParametro('mesa');
             document.getElementById('val-cli-id').innerText = obtenerParametro('cli_id');
             document.getElementById('val-cli-tel').innerText = obtenerParametro('cli_tel');
-            document.getElementById('val-bruto').innerText = obtenerParametro('bruto');
-            document.getElementById('val-iva').innerText = obtenerParametro('iva');
-            document.getElementById('val-neto').innerText = obtenerParametro('neto');
+            
+            // Limpiar los valores monetarios eliminando signos extras que envíe AppSheet
+            const bruto = obtenerParametro('bruto').replace('$', '').trim();
+            const iva = obtenerParametro('iva').replace('$', '').trim();
+            const neto = obtenerParametro('neto').replace('$', '').trim();
+
+            document.getElementById('val-bruto').innerText = bruto;
+            document.getElementById('val-iva').innerText = iva;
+            document.getElementById('val-neto').innerText = neto;
 
             const datosProductos = obtenerParametro('items');
             const tablaBody = document.getElementById('lista-items');
@@ -124,9 +131,9 @@
                 const unTercio = Math.floor(partes.length / 3);
                 
                 for (let i = 0; i < unTercio; i++) {
-                    const desc = partes[i] ? partes[i].trim() : 'Servicio';
+                    const desc = partes[i] ? partes[i].trim() : 'Servicio Técnico';
                     const cant = partes[i + unTercio] ? partes[i + unTercio].trim() : '1';
-                    const precio = partes[i + (unTercio * 2)] ? partes[i + (unTercio * 2)].trim() : '0';
+                    const precio = partes[i + (unTercio * 2)] ? partes[i + (unTercio * 2)].trim().replace('$', '') : '0';
                     
                     const numPrecio = parseFloat(precio.replace(/[^0-9.-]+/g,""));
                     const numCant = parseFloat(cant);
@@ -144,12 +151,11 @@
                 tablaBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#777;">No hay ítems registrados</td></tr>';
             }
 
+            // CORRECCIÓN CÓDIGO QR AUTOMÁTICO (Utilizando una API SSL alternativa rápida)
             const boletaId = obtenerParametro('boleta');
             if (boletaId) {
-                document.getElementById('img-qr').src = `https://qrserver.com{encodeURIComponent(boletaId)}`;
+                document.getElementById('img-qr').src = `https://quickchart.io{encodeURIComponent(boletaId)}&size=150`;
             }
-            
-            setTimeout(() => { window.print(); }, 800);
         });
     </script>
 </body>
