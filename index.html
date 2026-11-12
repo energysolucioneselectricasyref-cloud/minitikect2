@@ -1,168 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENERGY - Visor de Ticket Oficial</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .ticket { background: #fff; width: 80mm; padding: 5mm; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 2px; }
-        .brand { text-align: center; font-weight: bold; font-size: 16px; color: #FF6B00; margin-bottom: 5px; text-transform: uppercase; }
-        .subtitle { text-align: center; font-size: 11px; line-height: 14px; margin-bottom: 15px; border-bottom: 1px dashed #000; padding-bottom: 10px; }
-        .info-section { font-size: 12px; margin-bottom: 10px; line-height: 16px; }
-        .divider { border-top: 1px dashed #000; margin: 10px 0; }
-        
-        .items-table { width: 100%; font-size: 11px; border-collapse: collapse; margin: 10px 0; }
-        .items-table th { border-bottom: 1px solid #000; text-align: left; padding-bottom: 4px; }
-        .items-table td { padding: 4px 0; vertical-align: top; }
-        
-        .totals-table { width: 100%; font-size: 13px; margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
-        .totals-table td { padding: 3px 0; }
-        .text-right { text-align: right; }
-        .qr-container { text-align: center; margin-top: 20px; }
-        .qr-container img { width: 130px; height: 130px; display: inline-block; background: #f9f9f9; }
-        .footer-text { text-align: center; font-size: 11px; margin-top: 15px; font-style: italic; }
-        .btn-print { background: #FF6B00; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; position: fixed; bottom: 20px; right: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        @media print { body { background: none; padding: 0; display: block; } .ticket { width: 100%; box-shadow: none; padding: 0; } .btn-print { display: none; } }
-    </style>
+<meta charset="UTF-8">
+<style>
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #333333;
+    margin: 0;
+    padding: 20px;
+    font-size: 13px;
+  }
+  .header-table {
+    width: 100%;
+    border-bottom: 3px solid #FF6600;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  .company-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FF6600;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+  }
+  .company-details {
+    font-size: 12px;
+    color: #555555;
+    line-height: 1.4;
+  }
+  .doc-box {
+    background-color: #FFF3E6;
+    border: 2px solid #FF6600;
+    border-radius: 6px;
+    padding: 10px 15px;
+    text-align: right;
+  }
+  .doc-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF6600;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .doc-number {
+    font-size: 15px;
+    font-weight: bold;
+    color: #222222;
+    margin: 4px 0;
+  }
+  .client-section {
+    width: 100%;
+    background-color: #F9F9F9;
+    border-left: 4px solid #FF6600;
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  .client-section td {
+    padding: 3px 5px;
+  }
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .items-table th {
+    background-color: #FF6600;
+    color: #FFFFFF;
+    text-align: left;
+    padding: 10px 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  .items-table td {
+    border-bottom: 1px solid #E0E0E0;
+    padding: 8px;
+  }
+  .items-table tr:nth-child(even) {
+    background-color: #FAFAFA;
+  }
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .totals-table {
+    width: 45%;
+    float: right;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+  }
+  .totals-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #EEEEEE;
+  }
+  .total-final {
+    background-color: #FF6600;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .saldo-pendiente {
+    background-color: #FFE0CC;
+    color: #CC3300;
+    font-weight: bold;
+  }
+  .abonos-section {
+    clear: both;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px dashed #CCCCCC;
+  }
+  .abonos-title {
+    font-weight: bold;
+    color: #FF6600;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .notes-box {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #F4F4F4;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .footer {
+    margin-top: 35px;
+    text-align: center;
+    font-size: 11px;
+    color: #777777;
+    border-top: 1px solid #DDDDDD;
+    padding-top: 10px;
+  }
+</style>
 </head>
 <body>
 
-    <div class="ticket">
-        <div class="brand">ENERGY</div>
-        <div class="brand" style="font-size: 12px; color: #333; margin-top: -4px;">Soluciones Eléctricas y Refrigeración</div>
-        <div class="subtitle">
-            Carrera 47 #13-48 E2, Barrio San José<br>
-            Tierralta, Córdoba<br>
-            Cel: 3242432439
+  <!-- ENCABEZADO -->
+  <table class="header-table">
+    <tr>
+      <td style="width: 65%; vertical-align: top;">
+        <div class="company-name">ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</div>
+        <div class="company-details">
+          <strong>Dirección:</strong> Carrera 47 #13-48 E2, Barrio San José - Tierralta, Córdoba<br>
+          <strong>Teléfono / WhatsApp:</strong> 324 243 2439<br>
+          <strong>Servicios:</strong> Instalaciones Eléctricas, Mantenimiento y Refrigeración
         </div>
-
-        <div class="info-section">
-            <b id="lbl-tipo-doc">DOCUMENTO</b> N°: <span id="val-boleta"></span><br>
-            Fecha: <span id="val-fecha"></span><br>
-            Estado: <span id="val-estado"></span><br>
-            Método de Pago: <span id="val-metodo"></span>
+      </td>
+      <td style="width: 35%; vertical-align: top;">
+        <div class="doc-box">
+          <div class="doc-title"><<[Tipo_Documento]>></div>
+          <div class="doc-number">N° <<[Numero_Documento]>></div>
+          <div style="font-size: 11px; color: #555;">
+            <strong>Fecha Emisión:</strong> <<[Fecha_Emision]>><br>
+            <strong>Válido hasta:</strong> <<[Fecha_Vencimiento]>><br>
+            <strong>Estado:</strong> <<[Estado]>>
+          </div>
         </div>
+      </td>
+    </tr>
+  </table>
 
-        <div class="divider"></div>
+  <!-- DATOS DEL CLIENTE -->
+  <table class="client-section">
+    <tr>
+      <td style="width: 50%;"><strong>Cliente:</strong> <<[ID_Cliente].[Nombre_Cliente]>></td>
+      <td style="width: 50%;"><strong>CC / NIT:</strong> <<[ID_Cliente].[Documento_NIT]>></td>
+    </tr>
+    <tr>
+      <td><strong>Teléfono:</strong> <<[ID_Cliente].[Telefono]>></td>
+      <td><strong>Correo:</strong> <<[ID_Cliente].[Correo]>></td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Dirección:</strong> <<[ID_Cliente].[Direccion]>> - <<[ID_Cliente].[Barrio_Ciudad]>></td>
+    </tr>
+  </table>
 
-        <div class="info-section">
-            <b>CLIENTE:</b> <span id="val-cliente"></span><br>
-            ID/CC: <span id="val-cli-id"></span><br>
-            Teléfono: <span id="val-cli-tel"></span>
-        </div>
+  <!-- DETALLE DE PRODUCTOS Y SERVICIOS -->
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th style="width: 10%;" class="text-center">Cant.</th>
+        <th style="width: 45%;">Descripción del Producto / Servicio</th>
+        <th style="width: 15%;" class="text-right">V. Unitario</th>
+        <th style="width: 15%;" class="text-right">IVA</th>
+        <th style="width: 15%;" class="text-right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <<Start: [Related Detalle_Documentos]>>
+      <tr>
+        <td class="text-center"><<[Cantidad]>></td>
+        <td>
+          <strong><<[ID_Item].[Nombre_Item]>></strong><br>
+          <span style="font-size: 11px; color: #666;"><<[ID_Item].[Descripcion]>></span>
+        </td>
+        <td class="text-right"><<[Precio_Unitario]>></td>
+        <td class="text-right"><<[IVA_Linea]>></td>
+        <td class="text-right"><strong><<[Total_Linea]>></strong></td>
+      </tr>
+      <<End>>
+    </tbody>
+  </table>
 
-        <div class="divider"></div>
+  <!-- TOTALES -->
+  <table class="totals-table">
+    <tr>
+      <td><strong>Subtotal:</strong></td>
+      <td class="text-right"><<[Subtotal]>></td>
+    </tr>
+    <tr>
+      <td><strong>Total IVA:</strong></td>
+      <td class="text-right"><<[Total_IVA]>></td>
+    </tr>
+    <tr class="total-final">
+      <td>TOTAL GENERAL:</td>
+      <td class="text-right"><<[Total_General]>></td>
+    </tr>
+    <tr>
+      <td><strong>Total Abonado:</strong></td>
+      <td class="text-right"><<[Total_Abonado]>></td>
+    </tr>
+    <tr class="saldo-pendiente">
+      <td>SALDO PENDIENTE:</td>
+      <td class="text-right"><<[Saldo_Pendiente]>></td>
+    </tr>
+  </table>
 
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th class="text-right">Cant x Precio</th>
-                    <th class="text-right">Total</th>
-                </tr>
-            </thead>
-            <tbody id="lista-items">
-                <!-- Inyección automática por JavaScript -->
-            </tbody>
-        </table>
+  <!-- HISTORIAL DE ABONOS (Solo se muestra si existen abonos) -->
+  <<If: COUNT([Related Abonos]) > 0>>
+  <div class="abonos-section">
+    <div class="abonos-title">Registro de Pagos y Abonos</div>
+    <table class="items-table" style="width: 100%; font-size: 12px;">
+      <thead>
+        <tr>
+          <th style="background-color: #555555;">Fecha</th>
+          <th style="background-color: #555555;">Método de Pago</th>
+          <th style="background-color: #555555;" class="text-right">Valor Abonado</th>
+          <th style="background-color: #555555;" class="text-right">Cambio Efectivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <<Start: [Related Abonos]>>
+        <tr>
+          <td><<[Fecha_Abono]>></td>
+          <td><<[Metodo_Pago]>></td>
+          <td class="text-right"><<[Monto_Abono]>></td>
+          <td class="text-right"><<[Cambio_Efectivo]>></td>
+        </tr>
+        <<End>>
+      </tbody>
+    </table>
+  </div>
+  <<EndIf>>
 
-        <table class="totals-table">
-            <tr>
-                <td>Subtotal Bruto:</td>
-                <td class="text-right">$<span id="val-bruto">0.00</span></td>
-            </tr>
-            <tr>
-                <td>IVA (19%):</td>
-                <td class="text-right">$<span id="val-iva">0.00</span></td>
-            </tr>
-            <tr style="font-weight: bold; font-size: 15px;">
-                <td>TOTAL NETO:</td>
-                <td class="text-right">$<span id="val-neto">0.00</span></td>
-            </tr>
-        </table>
+  <!-- NOTAS Y OBSERVACIONES -->
+  <<If: ISNOTBLANK([Notas])>>
+  <div class="notes-box">
+    <strong>Observaciones / Garantía:</strong><br>
+    <<[Notas]>>
+  </div>
+  <<EndIf>>
 
-        <div class="qr-container">
-            <img id="img-qr" src="" alt="Cargando código QR...">
-            <p style="font-size: 10px; margin-top: 5px;">Validación de Servicio Técnico</p>
-        </div>
+  <!-- PIE DE PÁGINA -->
+  <div class="footer">
+    Gracias por confiar en <strong>ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</strong>.<br>
+    Documento generado digitalmente - Tierralta, Córdoba.
+  </div>
 
-        <div class="footer-text">
-            ¡Gracias por su confianza!<br>
-            Servicio Técnico Garantizado
-        </div>
-    </div>
-
-    <button class="btn-print" onclick="window.print()">Imprimir Ticket</button>
-
-    <script>
-        function obtenerParametro(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name) || '';
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // 1. CARGA DE VALORES PRINCIPALES DE MANERA LIMPIA
-            document.getElementById('lbl-tipo-doc').innerText = (obtenerParametro('tipo_doc') || 'DOCUMENTO').toUpperCase();
-            document.getElementById('val-boleta').innerText = obtenerParametro('boleta');
-            document.getElementById('val-fecha').innerText = obtenerParametro('fecha');
-            document.getElementById('val-estado').innerText = obtenerParametro('estado');
-            document.getElementById('val-metodo').innerText = obtenerParametro('metodo_pago');
-            document.getElementById('val-cliente').innerText = obtenerParametro('mesa');
-            document.getElementById('val-cli-id').innerText = obtenerParametro('cli_id');
-            document.getElementById('val-cli-tel').innerText = obtenerParametro('cli_tel');
-            
-            const bruto = obtenerParametro('bruto').replace('$', '').trim();
-            const iva = obtenerParametro('iva').replace('$', '').trim();
-            const neto = obtenerParametro('neto').replace('$', '').trim();
-
-            document.getElementById('val-bruto').innerText = bruto;
-            document.getElementById('val-iva').innerText = iva;
-            document.getElementById('val-neto').innerText = neto;
-
-            // 2. DETECTAR Y RECONSTRUIR PRODUCTOS SEPARADOS POR BARRAS '|'
-            const datosProductos = obtenerParametro('items');
-            const tablaBody = document.getElementById('lista-items');
-            
-            if (datosProductos && datosProductos.trim() !== "") {
-                tablaBody.innerHTML = ""; 
-                
-                const partes = datosProductos.split('|');
-                const unTercio = Math.floor(partes.length / 3);
-                
-                for (let i = 0; i < unTercio; i++) {
-                    const desc = partes[i] ? partes[i].trim() : 'Servicio Técnico';
-                    const cant = partes[i + unTercio] ? partes[i + unTercio].trim() : '1';
-                    const precio = partes[i + (unTercio * 2)] ? partes[i + (unTercio * 2)].trim().replace('$', '') : '0';
-                    
-                    const numPrecio = parseFloat(precio.replace(/[^0-9.-]+/g,"")) || 0;
-                    const numCant = parseFloat(cant) || 0;
-                    const totalLinea = numCant * numPrecio;
-                    
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${desc}</td>
-                        <td class="text-right">${cant} x $${numPrecio.toLocaleString('es-CO')}</td>
-                        <td class="text-right">$${totalLinea.toLocaleString('es-CO')}</td>
-                    `;
-                    tablaBody.appendChild(tr);
-                }
-            } else {
-                tablaBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#777;">No hay ítems registrados</td></tr>';
-            }
-
-            // 3. CORRECCIÓN DEFINITIVA DE LA API DE CÓDIGO QR
-            const boletaId = obtenerParametro('boleta');
-            if (boletaId) {
-                document.getElementById('img-qr').src = `https://quickchart.io{encodeURIComponent(boletaId)}&size=150`;
-            }
-            
-            // Disparador de impresión automática corregido y completo
-            setTimeout(() => { 
-                window.print(); 
-            }, 1000);
-        });
-    </script>
 </body>
 </html>
