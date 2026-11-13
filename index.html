@@ -113,7 +113,10 @@
         if(fila.trim() !== "") {
           const cols = fila.split(';');
           const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${cols[0] || ''}</td><td>${cols[1] || ''}</td><td>${cols[2] || ''}</td><td>${cols[3] || ''}</td>`;
+          tr.innerHTML = '<td>' + (cols[0] || '') + '</td>' +
+                         '<td>' + (cols[1] || '') + '</td>' +
+                         '<td>' + (cols[2] || '') + '</td>' +
+                         '<td>' + (cols[3] || '') + '</td>';
           tbody.appendChild(tr);
         }
       });
