@@ -3,265 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #333333;
-    margin: 0;
-    padding: 20px;
-    font-size: 13px;
-  }
-  .header-table {
-    width: 100%;
-    border-bottom: 3px solid #FF6600;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-  }
-  .company-name {
-    font-size: 20px;
-    font-weight: bold;
-    color: #FF6600;
-    margin: 0 0 5px 0;
-    text-transform: uppercase;
-  }
-  .company-details {
-    font-size: 12px;
-    color: #555555;
-    line-height: 1.4;
-  }
-  .doc-box {
-    background-color: #FFF3E6;
-    border: 2px solid #FF6600;
-    border-radius: 6px;
-    padding: 10px 15px;
-    text-align: right;
-  }
-  .doc-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #FF6600;
-    text-transform: uppercase;
-    margin: 0;
-  }
-  .doc-number {
-    font-size: 15px;
-    font-weight: bold;
-    color: #222222;
-    margin: 4px 0;
-  }
-  .client-section {
-    width: 100%;
-    background-color: #F9F9F9;
-    border-left: 4px solid #FF6600;
-    padding: 12px;
-    margin-bottom: 20px;
-  }
-  .client-section td {
-    padding: 3px 5px;
-  }
-  .items-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  .items-table th {
-    background-color: #FF6600;
-    color: #FFFFFF;
-    text-align: left;
-    padding: 10px 8px;
-    font-size: 12px;
-    text-transform: uppercase;
-  }
-  .items-table td {
-    border-bottom: 1px solid #E0E0E0;
-    padding: 8px;
-  }
-  .items-table tr:nth-child(even) {
-    background-color: #FAFAFA;
-  }
-  .text-right { text-align: right; }
-  .text-center { text-align: center; }
-  .totals-table {
-    width: 45%;
-    float: right;
-    border-collapse: collapse;
-    margin-bottom: 25px;
-  }
-  .totals-table td {
-    padding: 6px 8px;
-    border-bottom: 1px solid #EEEEEE;
-  }
-  .total-final {
-    background-color: #FF6600;
-    color: #FFFFFF;
-    font-weight: bold;
-    font-size: 14px;
-  }
-  .saldo-pendiente {
-    background-color: #FFE0CC;
-    color: #CC3300;
-    font-weight: bold;
-  }
-  .abonos-section {
-    clear: both;
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px dashed #CCCCCC;
-  }
-  .abonos-title {
-    font-weight: bold;
-    color: #FF6600;
-    margin-bottom: 8px;
-    font-size: 13px;
-  }
-  .notes-box {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #F4F4F4;
-    border-radius: 4px;
-    font-size: 12px;
-  }
-  .footer {
-    margin-top: 35px;
-    text-align: center;
-    font-size: 11px;
-    color: #777777;
-    border-top: 1px solid #DDDDDD;
-    padding-top: 10px;
-  }
+  body { font-family: Arial, sans-serif; color: #333; margin: 20px; }
+  .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+  .title { font-size: 24px; font-weight: bold; color: #0056b3; }
+  .info-box { margin-top: 20px; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th { background-color: #0056b3; color: white; padding: 10px; text-align: left; }
+  td { border-bottom: 1px solid #ddd; padding: 8px; }
+  .totals { width: 40%; float: right; margin-top: 20px; }
+  .totals td { border: none; padding: 5px; }
+  .total-final { font-weight: bold; font-size: 16px; background-color: #f2f2f2; }
+  .footer { margin-top: 80px; text-align: center; font-size: 12px; color: #777; clear: both; }
 </style>
 </head>
 <body>
 
-  <!-- ENCABEZADO -->
-  <table class="header-table">
-    <tr>
-      <td style="width: 65%; vertical-align: top;">
-        <div class="company-name">ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</div>
-        <div class="company-details">
-          <strong>Dirección:</strong> Carrera 47 #13-48 E2, Barrio San José - Tierralta, Córdoba<br>
-          <strong>Teléfono / WhatsApp:</strong> 324 243 2439<br>
-          <strong>Servicios:</strong> Instalaciones Eléctricas, Mantenimiento y Refrigeración
-        </div>
-      </td>
-      <td style="width: 35%; vertical-align: top;">
-        <div class="doc-box">
-          <div class="doc-title"><<[Tipo_Documento]>></div>
-          <div class="doc-number">N° <<[Numero_Documento]>></div>
-          <div style="font-size: 11px; color: #555;">
-            <strong>Fecha Emisión:</strong> <<[Fecha_Emision]>><br>
-            <strong>Válido hasta:</strong> <<[Fecha_Vencimiento]>><br>
-            <strong>Estado:</strong> <<[Estado]>>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </table>
+  <div class="header">
+    <div>
+      <div class="title">Energy Cotiza y Factura</div>
+      <p><strong><<[Tipo_Documento]>> N°:</strong> <<[Numero_Documento]>></p>
+      <p><strong>Estado:</strong> <<[Estado]>></p>
+    </div>
+    <div style="text-align: right;">
+      <p><strong>Fecha Emisión:</strong> <<[Fecha_Emision]>></p>
+      <p><strong>Fecha Vencimiento:</strong> <<[Fecha_Vencimiento]>></p>
+      <p><strong>Cliente:</strong> <<[ID_Cliente].[Nombre]>></p> 
+    </div>
+  </div>
 
-  <!-- DATOS DEL CLIENTE -->
-  <table class="client-section">
-    <tr>
-      <td style="width: 50%;"><strong>Cliente:</strong> <<[ID_Cliente].[Nombre_Cliente]>></td>
-      <td style="width: 50%;"><strong>CC / NIT:</strong> <<[ID_Cliente].[Documento_NIT]>></td>
-    </tr>
-    <tr>
-      <td><strong>Teléfono:</strong> <<[ID_Cliente].[Telefono]>></td>
-      <td><strong>Correo:</strong> <<[ID_Cliente].[Correo]>></td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>Dirección:</strong> <<[ID_Cliente].[Direccion]>> - <<[ID_Cliente].[Barrio_Ciudad]>></td>
-    </tr>
-  </table>
-
-  <!-- DETALLE DE PRODUCTOS Y SERVICIOS -->
-  <table class="items-table">
+  <table>
     <thead>
       <tr>
-        <th style="width: 10%;" class="text-center">Cant.</th>
-        <th style="width: 45%;">Descripción del Producto / Servicio</th>
-        <th style="width: 15%;" class="text-right">V. Unitario</th>
-        <th style="width: 15%;" class="text-right">IVA</th>
-        <th style="width: 15%;" class="text-right">Total</th>
+        <th>Descripción / Servicio</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
       <<Start: [Related Detalle_Documentos]>>
       <tr>
-        <td class="text-center"><<[Cantidad]>></td>
-        <td>
-          <strong><<[ID_Item].[Nombre_Item]>></strong><br>
-          <span style="font-size: 11px; color: #666;"><<[ID_Item].[Descripcion]>></span>
-        </td>
-        <td class="text-right"><<[Precio_Unitario]>></td>
-        <td class="text-right"><<[IVA_Linea]>></td>
-        <td class="text-right"><strong><<[Total_Linea]>></strong></td>
+        <td><<[ID_Servicio]>></td> 
+        <td><<[Cantidad]>></td>
+        <td><<[Precio_Unitario]>></td>
+        <td><<[Subtotal]>></td>
       </tr>
       <<End>>
     </tbody>
   </table>
 
-  <!-- TOTALES -->
-  <table class="totals-table">
+  <table class="totals">
     <tr>
       <td><strong>Subtotal:</strong></td>
-      <td class="text-right"><<[Subtotal]>></td>
+      <td style="text-align: right;"><<[Subtotal]>></td>
     </tr>
     <tr>
-      <td><strong>Total IVA:</strong></td>
-      <td class="text-right"><<[Total_IVA]>></td>
+      <td><strong>Descuento:</strong></td>
+      <td style="text-align: right;"><<[Descuento]>></td>
+    </tr>
+    <tr>
+      <td><strong>IVA Total:</strong></td>
+      <td style="text-align: right;"><<[IVA_Total]>></td>
     </tr>
     <tr class="total-final">
-      <td>TOTAL GENERAL:</td>
-      <td class="text-right"><<[Total_General]>></td>
+      <td>Total Documento:</td>
+      <td style="text-align: right;"><<[Total_Documento]>></td>
     </tr>
     <tr>
-      <td><strong>Total Abonado:</strong></td>
-      <td class="text-right"><<[Total_Abonado]>></td>
+      <td>Monto Pagado:</td>
+      <td style="text-align: right;"><<[Monto_Pagado]>></td>
     </tr>
-    <tr class="saldo-pendiente">
-      <td>SALDO PENDIENTE:</td>
-      <td class="text-right"><<[Saldo_Pendiente]>></td>
+    <tr>
+      <td><strong>Saldo Pendiente:</strong></td>
+      <td style="text-align: right;"><strong><<[Saldo_Pendiente]>></strong></td>
     </tr>
   </table>
 
-  <!-- HISTORIAL DE ABONOS (Solo se muestra si existen abonos) -->
-  <<If: COUNT([Related Abonos]) > 0>>
-  <div class="abonos-section">
-    <div class="abonos-title">Registro de Pagos y Abonos</div>
-    <table class="items-table" style="width: 100%; font-size: 12px;">
-      <thead>
-        <tr>
-          <th style="background-color: #555555;">Fecha</th>
-          <th style="background-color: #555555;">Método de Pago</th>
-          <th style="background-color: #555555;" class="text-right">Valor Abonado</th>
-          <th style="background-color: #555555;" class="text-right">Cambio Efectivo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <<Start: [Related Abonos]>>
-        <tr>
-          <td><<[Fecha_Abono]>></td>
-          <td><<[Metodo_Pago]>></td>
-          <td class="text-right"><<[Monto_Abono]>></td>
-          <td class="text-right"><<[Cambio_Efectivo]>></td>
-        </tr>
-        <<End>>
-      </tbody>
-    </table>
+  <div class="info-box" style="clear: both; padding-top: 20px;">
+    <p><strong>Método de Pago:</strong> <<[Metodo_Pago]>></p>
+    <p><strong>Notas:</strong> <<[Notas]>></p>
   </div>
-  <<EndIf>>
 
-  <!-- NOTAS Y OBSERVACIONES -->
-  <<If: ISNOTBLANK([Notas])>>
-  <div class="notes-box">
-    <strong>Observaciones / Garantía:</strong><br>
-    <<[Notas]>>
-  </div>
-  <<EndIf>>
-
-  <!-- PIE DE PÁGINA -->
   <div class="footer">
-    Gracias por confiar en <strong>ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</strong>.<br>
-    Documento generado digitalmente - Tierralta, Córdoba.
+    <p><<[Codigo_barra]>></p>
+    <p>Gracias por su preferencia.</p>
   </div>
 
 </body>
