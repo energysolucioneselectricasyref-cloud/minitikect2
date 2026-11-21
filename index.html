@@ -3,131 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Energy Soluciones Eléctricas y Refrigeración</title>
+<title>Comprobante de Pago de Nómina - Energy Soluciones</title>
 <style>
-  body { font-family: Arial, sans-serif; color: #333; margin: 15px auto; max-width: 800px; padding: 10px; }
+  body { font-family: Arial, sans-serif; color: #333; margin: 15px auto; max-width: 800px; padding: 15px; background: #fff; }
+  .no-print-bar { text-align: right; margin-bottom: 15px; }
+  .btn-print { padding: 10px 18px; background: #FF6600; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; }
   .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #FF6600; padding-bottom: 12px; gap: 15px; }
-  .brand-container { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .brand-container { display: flex; align-items: center; gap: 15px; }
   .logo-img { max-height: 75px; max-width: 140px; object-fit: contain; }
-  .company-name { font-size: 18px; font-weight: bold; color: #FF6600; margin-bottom: 4px; text-transform: uppercase; }
-  .company-details { font-size: 13px; color: #555; line-height: 1.4; }
-  .doc-info p, .client-info p { margin: 4px 0; font-size: 14px; }
-  .info-box { margin-top: 20px; margin-bottom: 20px; font-size: 14px; }
-  table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-  th { background-color: #FF6600; color: white; padding: 10px; text-align: left; }
-  td { border-bottom: 1px solid #ddd; padding: 8px; }
-  .totals { width: 45%; float: right; margin-top: 20px; font-size: 14px; }
-  .totals td { border: none; padding: 5px; }
-  .total-final { font-weight: bold; font-size: 16px; background-color: #FFF3E0; color: #E65100; }
-  .footer { margin-top: 80px; text-align: center; font-size: 12px; color: #777; clear: both; }
-  @media print { .no-print { display: none; } body { margin: 0; padding: 0; } }
+  .doc-title { font-size: 18px; font-weight: bold; color: #222; text-transform: uppercase; margin: 0 0 4px 0; }
+  .company-name { font-size: 13px; font-weight: bold; color: #FF6600; text-transform: uppercase; }
+  .company-city { font-size: 12px; color: #666; }
+  .doc-meta { text-align: right; font-size: 13px; min-width: 150px; }
+  .doc-meta p { margin: 3px 0; }
+
+  .section-title { font-size: 12px; font-weight: bold; color: #FF6600; text-transform: uppercase; margin: 18px 0 6px 0; }
+  
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 10px; }
+  .info-table td { border: 1px solid #ddd; padding: 6px 10px; }
+  .label-cell { background-color: #f9f9f9; font-weight: bold; width: 22%; color: #444; }
+  .value-cell { width: 28%; }
+
+  .liq-table th { background-color: #FF6600; color: white; padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; }
+  .liq-table th.right, .liq-table td.right { text-align: right; }
+  .liq-table td { border: 1px solid #ddd; padding: 7px 10px; }
+  .row-total { font-weight: bold; background-color: #f9f9f9; }
+
+  .neto-box { display: flex; justify-content: space-between; align-items: center; background-color: #FFF3E0; border: 1px solid #FFCC80; padding: 12px 15px; margin: 15px 0; font-weight: bold; font-size: 15px; color: #E65100; }
+
+  .hours-table th { background-color: #333; color: white; padding: 8px 10px; text-align: center; font-size: 12px; }
+  .hours-table td { border: 1px solid #ddd; padding: 7px 10px; text-align: center; }
+
+  .signature-section { margin-top: 25px; width: 320px; }
+  .sig-box { border: 1px solid #ccc; background-color: #fafafa; height: 110px; position: relative; border-radius: 4px; }
+  .sig-placeholder { font-size: 11px; color: #999; padding: 8px; pointer-events: none; position: absolute; top: 0; left: 0; }
+  canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+  .sig-footer { border-top: 1px solid #333; margin-top: 6px; padding-top: 4px; font-size: 12px; color: #333; }
+  .btn-clear { margin-top: 6px; padding: 5px 10px; font-size: 11px; background: #555; color: white; border: none; border-radius: 3px; cursor: pointer; }
+
+  @media print { .no-print { display: none; } body { margin: 0; padding: 0; } .sig-box { background: #fff; } }
 </style>
 </head>
 <body>
 
-  <button class="no-print" onclick="window.print()" style="padding: 10px 20px; background: #FF6600; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px; font-weight: bold;">🖨️ Imprimir Documento</button>
+  <div class="no-print-bar no-print">
+    <button class="btn-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
 
   <div class="header">
-    <div class="doc-info">
-      <div class="brand-container">
-        <img src="Logo.jpg" alt="Logo Energy Soluciones" class="logo-img">
-        <div>
-          <div class="company-name">ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</div>
-          <div class="company-details">
-            <strong>Dirección:</strong> Carrera 47 #13-48 E2, Barrio San José - Tierralta, Córdoba<br>
-            <strong>Teléfono / WhatsApp:</strong> 324 243 2439
-          </div>
-        </div>
+    <div class="brand-container">
+      <img src="Logo.jpg" alt="Logo Energy Soluciones" class="logo-img">
+      <div>
+        <h1 class="doc-title">COMPROBANTE DE PAGO<br>DE NÓMINA</h1>
+        <div class="company-name">ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</div>
+        <div class="company-city">Tierralta, Córdoba</div>
       </div>
-      <p><strong><span id="tipo"></span> N°:</strong> <span id="numero"></span></p>
-      <p><strong>Estado:</strong> <span id="estado"></span></p>
     </div>
-    <div class="client-info" style="text-align: right; min-width: 200px;">
-      <p><strong>Fecha Emisión:</strong> <span id="emision"></span></p>
-      <p><strong>Fecha Vencimiento:</strong> <span id="vencimiento"></span></p>
-      <p><strong>Cliente:</strong> <span id="cliente"></span></p> 
+    <div class="doc-meta">
+      <p><strong>N°:</strong> <span id="numero"></span></p>
+      <p><strong>Fecha:</strong> <span id="fecha"></span></p>
     </div>
   </div>
 
-  <table>
+  <div class="section-title">1. DATOS DEL EMPLEADOR</div>
+  <table class="info-table">
+    <tr>
+      <td class="label-cell">Empresa / Razón Social:</td>
+      <td class="value-cell">ENERGY SOLUCIONES ELÉCTRICAS Y REFRIGERACIÓN</td>
+      <td class="label-cell">NIT:</td>
+      <td class="value-cell">1073977725-0</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Ciudad:</td>
+      <td class="value-cell">Tierralta, Córdoba</td>
+      <td class="label-cell">Fecha de Emisión:</td>
+      <td class="value-cell" id="emision"></td>
+    </tr>
+  </table>
+
+  <div class="section-title">2. DATOS DEL TRABAJADOR Y PERIODO LIQUIDADO</div>
+  <table class="info-table">
+    <tr>
+      <td class="label-cell">Nombre:</td>
+      <td class="value-cell" id="nombre"></td>
+      <td class="label-cell">C.C.:</td>
+      <td class="value-cell" id="cc"></td>
+    </tr>
+    <tr>
+      <td class="label-cell">Cargo:</td>
+      <td class="value-cell" id="cargo"></td>
+      <td class="label-cell">Tipo de Contrato:</td>
+      <td class="value-cell" id="contrato"></td>
+    </tr>
+    <tr>
+      <td class="label-cell">Periodo Liquidado:</td>
+      <td class="value-cell" id="periodo"></td>
+      <td class="label-cell">Cuenta Bancaria:</td>
+      <td class="value-cell" id="cuenta"></td>
+    </tr>
+    <tr>
+      <td class="label-cell">EPS y Fondo Pensión:</td>
+      <td class="value-cell" colspan="3" id="seguridad_social"></td>
+    </tr>
+  </table>
+
+  <div class="section-title">3. RESUMEN DE LIQUIDACIÓN</div>
+  <table class="liq-table">
     <thead>
       <tr>
-        <th>Descripción / Servicio</th>
-        <th>Cantidad</th>
-        <th>Precio Unitario</th>
-        <th>Total</th>
+        <th style="width: 35%;">CONCEPTOS DEVENGADOS (Ingresos)</th>
+        <th class="right" style="width: 15%;">VALOR</th>
+        <th style="width: 35%;">DEDUCCIONES (Descuentos)</th>
+        <th class="right" style="width: 15%;">VALOR</th>
       </tr>
     </thead>
-    <tbody id="tabla-detalles">
+    <tbody>
+      <tr>
+        <td>Salario Básico / Horas Ordinarias</td>
+        <td class="right" id="salario_basico">$0.00</td>
+        <td>Aporte Salud (4%)</td>
+        <td class="right" id="salud">$0.00</td>
+      </tr>
+      <tr>
+        <td>Horas Extras y Recargos</td>
+        <td class="right" id="horas_extras">$0.00</td>
+        <td>Aporte Pensión (4%)</td>
+        <td class="right" id="pension">$0.00</td>
+      </tr>
+      <tr>
+        <td>Auxilio de Transporte</td>
+        <td class="right" id="aux_transporte">$0.00</td>
+        <td>Otras Deducciones</td>
+        <td class="right" id="otras_deducciones">$0.00</td>
+      </tr>
+      <tr class="row-total">
+        <td>TOTAL DEVENGADO</td>
+        <td class="right" id="total_devengado">$0.00</td>
+        <td>TOTAL DEDUCCIONES</td>
+        <td class="right" id="total_deducciones">$0.00</td>
+      </tr>
     </tbody>
   </table>
 
-  <table class="totals">
-    <tr>
-      <td><strong>Subtotal:</strong></td>
-      <td style="text-align: right;" id="subtotal"></td>
-    </tr>
-    <tr>
-      <td><strong>Descuento:</strong></td>
-      <td style="text-align: right;" id="descuento"></td>
-    </tr>
-    <tr>
-      <td><strong>IVA Total:</strong></td>
-      <td style="text-align: right;" id="iva"></td>
-    </tr>
-    <tr class="total-final">
-      <td>Total Documento:</td>
-      <td style="text-align: right;" id="total"></td>
-    </tr>
-    <tr>
-      <td>Monto Pagado:</td>
-      <td style="text-align: right;" id="pagado"></td>
-    </tr>
-    <tr>
-      <td><strong>Saldo Pendiente:</strong></td>
-      <td style="text-align: right;"><strong id="saldo"></strong></td>
-    </tr>
-  </table>
-
-  <div class="info-box" style="clear: both; padding-top: 20px;">
-    <p><strong>Método de Pago:</strong> <span id="metodo"></span></p>
-    <p><strong>Notas:</strong> <span id="notas"></span></p>
+  <div class="neto-box">
+    <span>NETO A PAGAR AL TRABAJADOR:</span>
+    <span id="neto_pagar">$0.00</span>
   </div>
 
-  <div class="footer">
-    <img id="barcode" src="" alt="Código de barras" style="max-height: 60px;"><br>
-    <p>Gracias por su preferencia.</p>
+  <div class="section-title">4. DETALLE DE HORAS TRABAJADAS EN EL PERIODO</div>
+  <table class="hours-table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+        <th>Total Horas</th>
+        <th>Valor Turno</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-horas">
+    </tbody>
+  </table>
+
+  <div class="signature-section">
+    <div class="sig-box">
+      <span class="sig-placeholder no-print" id="sig-hint">Firme aquí con el dedo o mouse</span>
+      <canvas id="firma-canvas"></canvas>
+    </div>
+    <div class="sig-footer">
+      Firma del empleado / Recibido a satisfacción<br>
+      C.C.: <span id="cc_firma"></span>
+    </div>
+    <button type="button" class="btn-clear no-print" onclick="limpiarFirma()">Limpiar firma</button>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const campos = ['tipo', 'numero', 'estado', 'emision', 'vencimiento', 'cliente', 'subtotal', 'descuento', 'iva', 'total', 'pagado', 'saldo', 'metodo', 'notas'];
-    
+    const campos = [
+      'numero', 'fecha', 'emision', 'nombre', 'cc', 'cargo', 
+      'contrato', 'periodo', 'cuenta', 'seguridad_social',
+      'salario_basico', 'horas_extras', 'aux_transporte', 'total_devengado',
+      'salud', 'pension', 'otras_deducciones', 'total_deducciones', 'neto_pagar'
+    ];
+
     campos.forEach(campo => {
       if (params.has(campo)) {
         document.getElementById(campo).innerText = params.get(campo);
       }
     });
 
-    if (params.has('barcode')) {
-      document.getElementById('barcode').src = params.get('barcode');
+    if (params.has('cc')) {
+      document.getElementById('cc_firma').innerText = params.get('cc');
     }
 
-    if (params.has('detalles')) {
-      const tbody = document.getElementById('tabla-detalles');
-      const filas = params.get('detalles').split('|');
+    // Cargar detalle de horas: ?horas=2026-11-01;08:00;17:00;8;$50.000|2026-11-02;08:00;17:00;8;$50.000
+    if (params.has('horas')) {
+      const tbody = document.getElementById('tabla-horas');
+      const filas = params.get('horas').split('|');
       filas.forEach(fila => {
-        if(fila.trim() !== "") {
+        if (fila.trim() !== "") {
           const cols = fila.split(';');
           const tr = document.createElement('tr');
           tr.innerHTML = '<td>' + (cols.at(0) || '') + '</td>' +
                          '<td>' + (cols.at(1) || '') + '</td>' +
                          '<td>' + (cols.at(2) || '') + '</td>' +
-                         '<td>' + (cols.at(3) || '') + '</td>';
+                         '<td>' + (cols.at(3) || '') + '</td>' +
+                         '<td>' + (cols.at(4) || '') + '</td>';
           tbody.appendChild(tr);
         }
       });
     }
-  </script>
-</body>
-</html>
+
+    // Lógica para el panel de firma táctil y con mouse
+    const canvas = document.getElementById('firma-canvas');
+    const ctx = canvas.getContext('2d');
+    const hint = document.getElementById('sig-hint');
+    let dibujando = false;
+
+    function ajustarCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000';
+    }
+    window.addEventListener('load', ajustarCanvas);
+
+    function obtenerPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function iniciarTrazo(e) {
+      dibujando = true;
+      hint.style.display = 'none';
+      const pos = obtenerPos(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function trazar(e) {
+      if (!dibujando) return;
+      e.preventDefault();
